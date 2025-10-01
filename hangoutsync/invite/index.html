@@ -4,63 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Únete a mi grupo en HangoutSync</title>
-    <!-- Opcional: Un poco de estilo para que se vea mejor en móviles -->
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f2f5;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            font-size: 24px;
-            color: #1c1e21;
-        }
-        p {
-            font-size: 16px;
-            color: #606770;
-        }
-        .play-button {
-            display: inline-block;
-            background-color: #007bff;
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 8px;
-            margin-top: 20px;
-            transition: background-color 0.3s;
-        }
-        .play-button:hover {
-            background-color: #0056b3;
-        }
+        /* ... tus estilos CSS ... */
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center; padding: 20px; }
+        .container { background-color: white; padding: 40px; border-radius: 12px; }
+        .play-button { display: inline-block; background-color: #007bff; color: white; padding: 15px 30px; text-decoration: none; font-size: 18px; border-radius: 8px; margin-top: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Has recibido una invitación</h1>
         <p>Para unirte al grupo, necesitas instalar la aplicación HangoutSync.</p>
+        <!-- El href de este botón se actualizará con JavaScript -->
         <a id="play-store-link" href="https://play.google.com/store/apps/details?id=com.hangoutsync.hangoutsync" class="play-button">
             Descargar en Google Play
         </a>
     </div>
 
-    <!-- Este script intenta abrir la app si está instalada, 
-         y si falla, redirige a Play Store tras un momento. -->
     <script>
-        
         window.onload = function() {
             // 1. Obtener los parámetros de la URL actual (ej: ?code=ABC123)
             const urlParams = new URLSearchParams(window.location.search);
