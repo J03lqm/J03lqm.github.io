@@ -52,7 +52,7 @@
     <div class="container">
         <h1>Has recibido una invitación</h1>
         <p>Para unirte al grupo, necesitas instalar la aplicación HangoutSync.</p>
-        <a href="https://play.google.com/store/apps/details?id=com.hangoutsync.hangoutsync" class="play-button">
+        <a id="play-store-link" href="https://play.google.com/store/apps/details?id=com.hangoutsync.hangoutsync" class="play-button">
             Descargar en Google Play
         </a>
     </div>
@@ -60,22 +60,32 @@
     <!-- Este script intenta abrir la app si está instalada, 
          y si falla, redirige a Play Store tras un momento. -->
     <script>
+        
         window.onload = function() {
-            // Intenta abrir el enlace profundo
+            // 1. Obtener los parámetros de la URL actual (ej: ?code=ABC123)
+            const urlParams = new URLSearchParams(window.location.search);
+            const invitationCode = urlParams.get('code');
+
+            // 2. Construir la URL de la Play Store con el referrer
+            let playStoreLink = "https://play.google.com/store/apps/details?id=com.hangoutsync.hangoutsync";
+            if (invitationCode) {
+                // Importante: La información del referrer debe estar codificada para URL
+                const referrer = new URLSearchParams({
+                    'utm_source': 'invite_link', // Buena práctica para analytics
+                    'invitation_code': invitationCode
+                });
+                playStoreLink += "&referrer=" + encodeURIComponent(referrer.toString());
+            }
+
+            // 3. Actualizar el enlace del botón
+            document.getElementById('play-store-link').href = playStoreLink;
+
+            // 4. (Opcional) Intentar abrir la app si ya está instalada
+            // Esta parte es un extra, la redirección a Play Store es el fallback
             const appLink = "intent://j03lqm.github.io/hangoutsync/invite" + window.location.search + "#Intent;scheme=https;package=com.hangoutsync.hangoutsync;end";
             
-            // Si el usuario viene de un navegador que no sea Chrome, el intent puede no funcionar.
-            // La redirección a Play Store es el fallback seguro.
-            const playStoreLink = "https://play.google.com/store/apps/details?id=com.hangoutsync.hangoutsync";
-
-            // Esperamos un poco para dar tiempo al navegador a procesar el intent://
-            setTimeout(function () {
-                // Esta redirección solo ocurrirá si el intent falla (es decir, la app no está instalada)
-                window.location.replace(playStoreLink);
-            }, 1000);
-            
-            // Intenta navegar al intent. No todos los navegadores lo soportan bien.
-            window.location.replace(appLink);
+            // Si no se puede abrir la app, la página permanece y el usuario puede hacer clic en el botón.
+            // Esto es más simple y robusto que la redirección automática.
         };
     </script>
 </body>
