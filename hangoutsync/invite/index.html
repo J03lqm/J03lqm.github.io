@@ -23,11 +23,10 @@
 
     <script>
 window.onload = function() {
-    // Obtener parámetros de la URL (ej: ?code=ABC123)
     const urlParams = new URLSearchParams(window.location.search);
     const invitationCode = urlParams.get('code') || "";
 
-    // Construir la URL de la Play Store con referrer
+    // Play Store con referrer
     let playStoreLink = "https://play.google.com/store/apps/details?id=com.hangoutsync.hangoutsync";
     if (invitationCode) {
         const referrerParams = new URLSearchParams({
@@ -37,20 +36,25 @@ window.onload = function() {
         playStoreLink += "&referrer=" + referrerParams.toString();
     }
 
-    // Construir el deep link para la app (esto debe coincidir con tu intent-filter en AndroidManifest)
-    const appDeepLink = "intent://j03lqm.github.io/hangoutsync/invite?code=" 
+    // Deep link con el código
+    const appLink = "intent://j03lqm.github.io/hangoutsync/invite?code=" 
         + encodeURIComponent(invitationCode) 
         + "#Intent;scheme=https;package=com.hangoutsync.hangoutsync;end";
 
-    // Intentar abrir la app
-    window.location = appDeepLink;
+    // Crear un enlace oculto para disparar el intent
+    const hiddenLink = document.createElement("a");
+    hiddenLink.href = appLink;
+    document.body.appendChild(hiddenLink);
 
-    // Si no tiene la app, después de 1 segundo lo mandamos al Play Store
+    // Intentar abrir la app
+    hiddenLink.click();
+
+    // Fallback: si en 1s no pasó nada, redirigir al Play Store
     setTimeout(() => {
-        window.location = playStoreLink;
+        window.location.href = playStoreLink;
     }, 1000);
 
-    // Actualizar botón de respaldo manual
+    // Botón manual también actualizado
     document.getElementById('play-store-link').href = playStoreLink;
 };
     </script>
