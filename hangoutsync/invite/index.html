@@ -22,32 +22,34 @@
     </div>
 
     <script>
-        window.onload = function() {
-            // 1. Obtener los parámetros de la URL actual (ej: ?code=ABC123)
-            const urlParams = new URLSearchParams(window.location.search);
-            const invitationCode = urlParams.get('code');
+window.onload = function() {
+    // 1. Obtener los parámetros de la URL actual (ej: ?code=ABC123)
+    const urlParams = new URLSearchParams(window.location.search);
+    const invitationCode = urlParams.get('code');
 
-            // 2. Construir la URL de la Play Store con el referrer
-            let playStoreLink = "https://play.google.com/store/apps/details?id=com.hangoutsync.hangoutsync";
-            if (invitationCode) {
-                // Importante: La información del referrer debe estar codificada para URL
-                const referrer = new URLSearchParams({
-                    'utm_source': 'invite_link', // Buena práctica para analytics
-                    'invitation_code': invitationCode
-                });
-                playStoreLink += "&referrer=" + encodeURIComponent(referrer.toString());
-            }
+    // 2. Construir la URL de la Play Store con el referrer
+    let playStoreLink = "https://play.google.com/store/apps/details?id=com.hangoutsync.hangoutsync";
+    if (invitationCode) {
+        const referrerParams = new URLSearchParams({
+            'utm_source': 'invite_link', // Buena práctica para analytics
+            'invitation_code': invitationCode
+        });
+        playStoreLink += "&referrer=" + referrerParams.toString();
+    }
 
-            // 3. Actualizar el enlace del botón
-            document.getElementById('play-store-link').href = playStoreLink;
+    // 3. Actualizar el enlace del botón
+    document.getElementById('play-store-link').href = playStoreLink;
 
-            // 4. (Opcional) Intentar abrir la app si ya está instalada
-            // Esta parte es un extra, la redirección a Play Store es el fallback
-            const appLink = "intent://j03lqm.github.io/hangoutsync/invite" + window.location.search + "#Intent;scheme=https;package=com.hangoutsync.hangoutsync;end";
-            
-            // Si no se puede abrir la app, la página permanece y el usuario puede hacer clic en el botón.
-            // Esto es más simple y robusto que la redirección automática.
-        };
+    // 4. Intentar abrir la app si ya está instalada (Android intent)
+    const appLink = "intent://j03lqm.github.io/hangoutsync/invite" 
+        + window.location.search 
+        + "#Intent;scheme=https;package=com.hangoutsync.hangoutsync;end";
+
+    // Pequeño retraso para permitir que cargue la página
+    setTimeout(() => {
+        window.location = appLink;
+    }, 500);
+};
     </script>
 </body>
 </html>
